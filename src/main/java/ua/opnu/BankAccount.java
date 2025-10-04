@@ -6,7 +6,9 @@ public class BankAccount {
     double transactionFee;
 
     void deposit(double amount) {
-        // TODO: modify method body
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount can't be negative");
+        }
         balance = balance + amount;
     }
 
@@ -15,13 +17,45 @@ public class BankAccount {
     }
 
     boolean withdraw(double amount) {
-        // TODO: modify method body
-        balance = balance - amount;
-        return true;
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount can't be negative");
+        }
+
+        double totalAmount = amount + transactionFee;
+
+        if (balance >= totalAmount) {
+            balance = balance - totalAmount;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     boolean transfer(BankAccount receiver, double amount) {
-        // TODO: modify method body
-        return false;
+        if (amount <= 0) {
+            return false;
+        }
+
+        if (receiver == null) {
+            return false;
+        }
+
+        double totalAmount = amount + transactionFee;
+
+        if (balance >= totalAmount) {
+            balance = balance - totalAmount;
+
+            receiver.balance = receiver.balance + amount;
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void setTransactionFee(double fee) {
+        if (fee >= 0) {
+            this.transactionFee = fee;
+        }
     }
 }
