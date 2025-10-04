@@ -3,44 +3,83 @@ package ua.opnu;
 
 public class TimeSpan {
 
-    // TODO: add class fields
+    private int hours;
+    private int minutes;
 
     TimeSpan(int hours, int minutes) {
-        // TODO: write constructor body
+        if (hours < 0 || minutes < 0) {
+            throw new IllegalArgumentException("Time span can't be negative");
+        }
+
+        if (minutes > 59) {
+            throw new IllegalArgumentException("Minutes can be between 0 and 59");
+        }
+
+        this.hours = hours;
+        this.minutes = minutes;
     }
 
     int getHours() {
-        return 0;
+        return this.hours;
     }
 
     int getMinutes() {
-        // TODO: write method body
-        return 0;
+        return this.minutes;
     }
 
     void add(int hours, int minutes) {
-        // TODO: write method body
+        if (hours < 0 || minutes < 0) {
+            throw new IllegalArgumentException("Time span can't be negative");
+        }
+
+        if (minutes > 59) {
+            throw new IllegalArgumentException("Minutes can be between 0 and 59");
+        }
+
+        this.minutes += minutes;
+        this.hours += hours;
+
+        if (this.minutes > 59) {
+            this.hours += this.minutes / 60;
+            this.minutes = this.minutes % 60;
+        }
     }
 
     void addTimeSpan(TimeSpan timespan) {
-        // TODO: write method body
+        add(timespan.getHours(), timespan.getMinutes());
     }
 
     double getTotalHours() {
-        // TODO: write method body
-        return 0;
+        return this.hours + (this.minutes / 60.0);
     }
 
     int getTotalMinutes() {
-        // TODO: write method body
-        return 0;
+        return this.hours * 60 + this.minutes;
     }
 
     void subtract(TimeSpan span) {
-        // TODO: write method body
+        int currentTotalMinutes = this.getTotalMinutes();
+        int spanTotalMinutes = span.getTotalMinutes();
+
+        if (spanTotalMinutes > currentTotalMinutes) {
+            throw new IllegalArgumentException("Can't subtract larger timespan from smaller one");
+        }
+
+        int resultMinutes = currentTotalMinutes - spanTotalMinutes;
+
+        this.hours = resultMinutes / 60;
+        this.minutes = resultMinutes % 60;
     }
 
     void scale(int factor) {
-        // TODO: write method body
+        if (factor <= 0) {
+            throw new IllegalArgumentException("Factor must be greater than zero");
+        }
+
+        int totalMinutes = this.getTotalMinutes();
+        totalMinutes *= factor;
+
+        this.hours = totalMinutes / 60;
+        this.minutes = totalMinutes % 60;
     }
 }
